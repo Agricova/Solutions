@@ -250,5 +250,56 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 </script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/6854b89edabf301911aabda0/1iu5f2b76';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+<script>
+(function(){
+  if(window._agricovaQuoteHooked) return;
+  window._agricovaQuoteHooked = true;
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const form = document.querySelector('#quoteForm') || document.querySelector('form[action*="quote"]');
+    if(!form) return;
+    form.id = 'quoteForm';
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const fd = new FormData(form);
+      const data = {};
+      fd.forEach((v,k)=>data[k]=v);
+
+      if(window.Tawk_API){
+        try{
+          Tawk_API.setAttributes({
+            name  : data.name  || data.fullname || '',
+            email : data.email || '',
+            phone : data.phone || data.tel || ''
+          }, ()=>{});
+          Tawk_API.addEvent('quote_form_submitted', data, ()=>{});
+          // open widget only if it's not already open
+          if(typeof Tawk_API.isChatMaximized === 'function' && !Tawk_API.isChatMaximized()){
+            Tawk_API.maximize();
+          }
+        }catch(err){ console.error(err); }
+      }
+
+      // single thank‑you
+      alert("Thanks! We’ve received your quote details. A chat agent will reach out shortly.");
+      form.reset();
+    }, {once:false});
+  });
+})();
+</script>
 </body>
 </html>
