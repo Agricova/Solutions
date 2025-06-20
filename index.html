@@ -6,6 +6,30 @@
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Agricova – Hydroponics Lighting &amp; Climate Control</title>
 <link href="css/main.css" rel="stylesheet"/>
+
+<!-- Custom fixes -->
+<style>
+  /* Mobile-only video resize */
+  @media (max-width:768px){
+    .video-block iframe{
+      width:100% !important;
+      height:calc(56.25vw) !important; /* 16:9 aspect */
+    }
+  }
+
+  /* Keep Tawk.to chat bubble visible */
+  #tawkchat-container,
+  #tawkchat-minified,
+  .tawk-min-container,
+  .tawk-min-holder{
+    position:fixed !important;
+    z-index:2147483647 !important; /* stay on top */
+    visibility:visible !important;
+    opacity:1 !important;
+    transform:translate3d(0,0,0) !important; /* reset any translate */
+  }
+</style>
+
 </head>
 <body>
 <!-- NAVIGATION -->
