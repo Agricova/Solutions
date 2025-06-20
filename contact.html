@@ -71,7 +71,7 @@
 </nav>
 
 <div class="quote-wrapper">
-<form id="contactForm">
+<form id="contactForm" action="mailto:agracovait@gmail.com" method="POST" enctype="text/plain">
   <h2>Contact Support</h2>
   <label>Name
     <input name="name" required>
@@ -133,7 +133,7 @@ function sendToTawk(formId, service){
       document.getElementById('thanks').style.display='block';
     }else{
       // fallback mailto
-      window.location.href = 'mailto:tickets@agricova.p.tawk.email';
+      window.location.href = 'mailto:agracovait@gmail.com';
     }
   });
 }
