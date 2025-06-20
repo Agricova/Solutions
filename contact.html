@@ -25,17 +25,6 @@
 .form-card button{margin-top:1rem}
 .quote-wrapper{padding-top:100px;padding-bottom:60px}
 
-/* --- Dark form styling --- */
-.form-card label{color:var(--gray);}
-.form-card input,.form-card textarea,.form-card select{
-  background:#1e293b;color:var(--gray);border:1px solid var(--border);
-}
-.form-card input::placeholder,.form-card textarea::placeholder{color:#64748b}
-.form-card button{
-  background:var(--brand);color:#fff;border:none;padding:.7rem 1.2rem;border-radius:var(--radius);
-}
-.form-card button:hover{background:var(--brand-light)}
-
 </style>
 </head>
 <body>
@@ -107,57 +96,35 @@
 
 
 
-<script>
-function initTawkForm(formId,dept){
-  const f=document.getElementById(formId);
-  if(!f)return;
-  f.addEventListener('submit',function(e){
-    e.preventDefault();
-    const data=Object.fromEntries(new FormData(f).entries());
-    if(window.Tawk_API&&typeof Tawk_API.setAttributes==='function'){
-      Tawk_API.setAttributes({name:data.name||'',email:data.email||'',department:dept},()=>{});
-      let msg='';
-      for(const [k,v] of Object.entries(data)){ if(k!=='name'&&k!=='email') msg+=k+': '+v+'\n'; }
-      if(typeof Tawk_API.addEvent==='function'){Tawk_API.addEvent(dept+' Form',{ message: msg });}
-      if(typeof Tawk_API.maximize==='function') Tawk_API.maximize();
-      f.style.display='none';
-      const th=document.getElementById('thanks'); if(th) th.style.display='block';
-    } else {
-      window.location.href='mailto:agracovait@gmail.com';
-    }
-  });
-}
-Tawk_API=Tawk_API||{};
-Tawk_API.onLoad=function(){ initTawkForm('contactForm','Support'); };
-</script>
+
+
+
+
 
 
 <script>
 (function() {
   const form = document.getElementById('contactForm');
   if(!form) return;
-  function handleSubmit(e){
-    e.preventDefault();
+  function send(){
     const data = Object.fromEntries(new FormData(form).entries());
-    const messageLines = Object.entries(data)
-      .map(([k,v])=>k+': '+v)
-      .join('\n');
-    const push = () => {
-      if(window.Tawk_API && typeof Tawk_API.setAttributes==='function' && typeof Tawk_API.addMessage==='function'){
-        Tawk_API.setAttributes({ name: data.name||'', email: data.email||'', department: 'Support' }, ()=>{});
-        Tawk_API.maximize();
-        Tawk_API.addMessage({ text: messageLines, position: 'visitor' });
-        form.style.display='none';
-        document.getElementById('thanks').style.display='block';
-      } else {
-        setTimeout(push, 500);
-      }
-    };
-    push();
+    const lines = Object.entries(data).map(([k,v])=>k+': '+v).join('\n');
+    Tawk_API.addMessage({ text: lines, position: 'visitor' });
+    Tawk_API.setAttributes({ name: data.name||'', email: data.email||'', department: 'Support' },()=>{});
+    form.style.display='none';
+    document.getElementById('thanks').style.display='block';
   }
-  form.addEventListener('submit', handleSubmit);
-  Tawk_API = Tawk_API || {};
-  Tawk_API.onLoad = function(){ console.log('Tawk loaded'); };
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(window.Tawk_API && typeof Tawk_API.addMessage==='function'){
+      send();
+      Tawk_API.maximize();
+    } else {
+      // wait until widget loads
+      window.Tawk_API = window.Tawk_API || {};
+      Tawk_API.onLoad = function(){ send(); Tawk_API.maximize(); };
+    }
+  });
 })();
 </script>
 
