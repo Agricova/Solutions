@@ -24,6 +24,18 @@
 }
 .form-card button{margin-top:1rem}
 .quote-wrapper{padding-top:100px;padding-bottom:60px}
+
+/* --- Dark form styling --- */
+.form-card label{color:var(--gray);}
+.form-card input,.form-card textarea,.form-card select{
+  background:#1e293b;color:var(--gray);border:1px solid var(--border);
+}
+.form-card input::placeholder,.form-card textarea::placeholder{color:#64748b}
+.form-card button{
+  background:var(--brand);color:#fff;border:none;padding:.7rem 1.2rem;border-radius:var(--radius);
+}
+.form-card button:hover{background:var(--brand-light)}
+
 </style>
 </head>
 <body>
@@ -71,7 +83,7 @@
 </nav>
 
 <div class="quote-wrapper">
-<form id="contactForm" action="mailto:agracovait@gmail.com" method="POST" enctype="text/plain">
+<form id="contactForm">
   <h2>Contact Support</h2>
   <label>Name
     <input name="name" required>
