@@ -5,25 +5,29 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Knowledge Base – Agricova</title>
 
-  <!-- Your global stylesheet (colours, fonts, layout, etc.) -->
+  <!-- Your global styles (kept exactly as on every other page) -->
   <link rel="stylesheet" href="css/main.css">
 
-  <!-- Page-specific tweaks: just stacking order + pointer-events -->
+  <!-- Page-specific: stacking order + dynamic top-offset for the iframe -->
   <style>
-    /* Put the whole navbar layer in front of the iframe */
+    /* keep navbar above everything */
     nav            { position:fixed; top:0; left:0; right:0; z-index:20000; }
-    nav ul         { z-index:20001; }      /* dropdown even higher */
-    nav .menu-toggle { z-index:20002; }    /* the ☰ button always tappable */
+    nav ul         { z-index:20001; }
+    nav .menu-toggle { z-index:20002; }
 
-    /* Embedded Knowledge-Base */
-    iframe.kb {
+    /* let JS write the real height into a CSS custom property */
+    :root{ --nav-h:60px; }   /* fallback */
+
+    /* Knowledge-Base iframe */
+    iframe.kb{
       width:100%;
-      height:calc(100vh - 60px);  /* full height minus navbar */
       border:0;
       display:block;
+      margin-top:var(--nav-h);              /* pushed below nav */
+      height:calc(100vh - var(--nav-h));    /* fills the rest */
     }
 
-    /* While the mobile dropdown is open, prevent the iframe eating taps */
+    /* while the dropdown is open, stop the iframe swallowing taps */
     @media (max-width:768px){
       body.menu-open iframe.kb{ pointer-events:none; }
     }
@@ -31,7 +35,7 @@
 </head>
 
 <body>
-  <!-- NAVBAR (identical markup to your other pages) -->
+  <!-- NAVBAR (identical markup) -->
   <nav>
     <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
     <a href="index.html">
@@ -50,20 +54,33 @@
   <!-- EMBEDDED KB -->
   <iframe class="kb" src="https://agricova.tawk.help" title="Agricova Knowledge Base"></iframe>
 
-  <!-- MOBILE MENU TOGGLE: adds/removes .menu-open on <body> -->
+  <!-- MOBILE MENU TOGGLE + dynamic nav height sync -->
   <script>
     (function(){
-      const toggle = document.querySelector('.menu-toggle');
-      const navUl  = document.querySelector('nav ul');
+      const toggle  = document.querySelector('.menu-toggle');
+      const navUl   = document.querySelector('nav ul');
+      const navBar  = document.querySelector('nav');
+      const root    = document.documentElement;
 
-      if(!toggle || !navUl) return;
+      function syncNavHeight(){
+        /* write the current pixel height to the CSS custom property */
+        const h = navBar.offsetHeight;
+        root.style.setProperty('--nav-h', h + 'px');
+      }
 
-      toggle.addEventListener('click', () => {
-        const expanded = toggle.getAttribute('aria-expanded') === 'true';
-        toggle.setAttribute('aria-expanded', !expanded);
-        navUl.classList.toggle('show');             // your existing CSS handles this
-        document.body.classList.toggle('menu-open');
-      });
+      /* update on load & whenever window resizes/orientation changes */
+      window.addEventListener('load',  syncNavHeight);
+      window.addEventListener('resize',syncNavHeight);
+
+      /* mobile dropdown behaviour */
+      if(toggle && navUl){
+        toggle.addEventListener('click', () => {
+          const open = toggle.getAttribute('aria-expanded') === 'true';
+          toggle.setAttribute('aria-expanded', !open);
+          navUl.classList.toggle('show');
+          document.body.classList.toggle('menu-open');
+        });
+      }
     })();
   </script>
 
