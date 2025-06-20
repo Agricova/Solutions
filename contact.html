@@ -115,7 +115,7 @@ var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
   var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
   s1.async=true;
   /* TODO: Replace PROPERTY_ID/UNIQUE_ID with your actual tawk.to property ID and widget ID */
-  s1.src='https://embed.tawk.to/6854b89edabf301911aabda0/1iusf2b76';
+  s1.src='https://embed.tawk.to/6854b89edabf301911aabda0/1iu5f2b76';
   s1.charset='UTF-8';
   s1.setAttribute('crossorigin','*');
   s0.parentNode.insertBefore(s1,s0);
@@ -151,6 +151,31 @@ function sendToTawk(formId, service){
 }
 </script>
 
-<script>sendToTawk("contactForm","Support");</script>
+
+
+<script>
+function initTawkForm(formId,dept){
+  const f=document.getElementById(formId);
+  if(!f)return;
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    const data=Object.fromEntries(new FormData(f).entries());
+    if(window.Tawk_API&&typeof Tawk_API.setAttributes==='function'){
+      Tawk_API.setAttributes({name:data.name||'',email:data.email||'',department:dept},()=>{});
+      let msg='';
+      for(const [k,v] of Object.entries(data)){ if(k!=='name'&&k!=='email') msg+=k+': '+v+'\n'; }
+      if(typeof Tawk_API.addEvent==='function'){Tawk_API.addEvent(dept+' Form',{ message: msg });}
+      if(typeof Tawk_API.maximize==='function') Tawk_API.maximize();
+      f.style.display='none';
+      const th=document.getElementById('thanks'); if(th) th.style.display='block';
+    } else {
+      window.location.href='mailto:agracovait@gmail.com';
+    }
+  });
+}
+Tawk_API=Tawk_API||{};
+Tawk_API.onLoad=function(){ initTawkForm('contactForm','Support'); };
+</script>
+
 </body>
 </html>
