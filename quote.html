@@ -83,7 +83,7 @@
 </nav>
 
 <div class="quote-wrapper">
-<form action="mailto:agracovait@gmail.com" method="POST" enctype="text/plain">
+<form id="quoteForm">
   <h2>Request a Quote</h2>
   <label>Name
     <input name="name" required>
@@ -109,6 +109,62 @@
 </form>
 </div>
 
+
+
+
+<script>
+function initTawkForm(formId,dept){
+  const f=document.getElementById(formId);
+  if(!f)return;
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    const data=Object.fromEntries(new FormData(f).entries());
+    if(window.Tawk_API&&typeof Tawk_API.setAttributes==='function'){
+      Tawk_API.setAttributes({name:data.name||'',email:data.email||'',department:dept},()=>{});
+      let msg='';
+      for(const [k,v] of Object.entries(data)){ if(k!=='name'&&k!=='email') msg+=k+': '+v+'\n'; }
+      if(typeof Tawk_API.addEvent==='function'){Tawk_API.addEvent(dept+' Form',{ message: msg });}
+      if(typeof Tawk_API.maximize==='function') Tawk_API.maximize();
+      f.style.display='none';
+      const th=document.getElementById('thanks'); if(th) th.style.display='block';
+    } else {
+      window.location.href='mailto:agracovait@gmail.com';
+    }
+  });
+}
+Tawk_API=Tawk_API||{};
+Tawk_API.onLoad=function(){ initTawkForm('quoteForm','Quote'); };
+</script>
+
+
+<script>
+(function() {
+  const form = document.getElementById('quoteForm');
+  if(!form) return;
+  function handleSubmit(e){
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+    const messageLines = Object.entries(data)
+      .map(([k,v])=>k+': '+v)
+      .join('\n');
+    const push = () => {
+      if(window.Tawk_API && typeof Tawk_API.setAttributes==='function' && typeof Tawk_API.addMessage==='function'){
+        Tawk_API.setAttributes({ name: data.name||'', email: data.email||'', department: 'Quote' }, ()=>{});
+        Tawk_API.maximize();
+        Tawk_API.addMessage({ text: messageLines, position: 'visitor' });
+        form.style.display='none';
+        document.getElementById('thanks').style.display='block';
+      } else {
+        setTimeout(push, 500);
+      }
+    };
+    push();
+  }
+  form.addEventListener('submit', handleSubmit);
+  Tawk_API = Tawk_API || {};
+  Tawk_API.onLoad = function(){ console.log('Tawk loaded'); };
+})();
+</script>
 
 </body>
 </html>
