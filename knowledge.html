@@ -5,15 +5,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Knowledge Base – Agricova</title>
   <link rel="stylesheet" href="css/main.css">
-  <style>
-    /* Ensure the KB iframe remains full‑height while letting the navbar menu sit above it */
-    iframe.kb { width:100%; height:calc(100vh - 60px); border:0; }
 
-    /* NEW — lift the navbar and its dropdown above the iframe on mobile */
-    nav{position:relative;z-index:10000;}
-    nav ul{z-index:10000;}
+  <style>
+    /* ---------- Layout for the embedded Knowledge-Base ---------- */
+    iframe.kb{
+      width:100%;
+      height:calc(100vh - 60px);   /* full height minus navbar */
+      border:0;
+      position:relative;
+      z-index:1;                   /* stays at the bottom */
+    }
+
+    /* ---------- Navbar (always on top of iframe) ---------- */
+    nav{
+      position:fixed;
+      top:0;left:0;right:0;
+      background:#fff;
+      z-index:20000;
+    }
+
+    /* Desktop nav list */
+    nav ul{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:flex;
+      align-items:center;
+    }
+
+    /* ---------- Mobile overrides ---------- */
+    @media(max-width:768px){
+      nav ul{
+        position:fixed;            /* pulls the dropdown OUT of the navbar height */
+        top:60px; left:0; right:0;
+        flex-direction:column;
+        background:#fff;
+        padding:1rem 0;
+        display:none;
+        z-index:20001;             /* sits above iframe (& above nav bar) */
+      }
+      nav ul.show{display:flex;}
+
+      /* When the menu is open, let taps hit the menu—not the iframe */
+      body.menu-open iframe.kb{pointer-events:none;}
+    }
   </style>
 </head>
+
 <body>
   <nav>
     <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
@@ -27,16 +65,33 @@
     </ul>
   </nav>
 
-  <!-- Embedded Knowledge‑Base (Tawk Help) -->
+  <!-- Embedded Knowledge-Base (Tawk Help) -->
   <iframe class="kb" src="https://agricova.tawk.help" title="Agricova Knowledge Base"></iframe>
 
-  <!-- tawk.to live‑chat widget -->
+  <!-- Mobile-menu toggle logic -->
+  <script>
+    (function(){
+      const btn   = document.querySelector('.menu-toggle');
+      const navUl = document.querySelector('nav ul');
+      if(!btn || !navUl) return;
+
+      btn.addEventListener('click',()=>{
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !expanded);
+        navUl.classList.toggle('show');
+        document.body.classList.toggle('menu-open');
+      });
+    })();
+  </script>
+
+  <!-- tawk.to live-chat widget -->
   <script>
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
-      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      var s1=document.createElement("script"),
+          s0=document.getElementsByTagName("script")[0];
       s1.async=true;
-      /* TODO: Replace PROPERTY_ID/UNIQUE_ID with your actual tawk.to property ID and widget ID */
+      /* Replace the IDs below with your real tawk.to property & widget IDs */
       s1.src="https://embed.tawk.to/6854b89edabf301911aabda0/1iusf2b76";
       s1.charset="UTF-8";
       s1.setAttribute("crossorigin","*");
