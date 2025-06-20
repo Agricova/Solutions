@@ -1,107 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Knowledge Base – Agricova</title>
+
+  <!-- Your global stylesheet (colours, fonts, layout, etc.) -->
   <link rel="stylesheet" href="css/main.css">
 
+  <!-- Page-specific tweaks: just stacking order + pointer-events -->
   <style>
-    /* ---------- Embedded KB iframe ---------- */
-    iframe.kb{
+    /* Put the whole navbar layer in front of the iframe */
+    nav            { position:fixed; top:0; left:0; right:0; z-index:20000; }
+    nav ul         { z-index:20001; }      /* dropdown even higher */
+    nav .menu-toggle { z-index:20002; }    /* the ☰ button always tappable */
+
+    /* Embedded Knowledge-Base */
+    iframe.kb {
       width:100%;
-      height:calc(100vh - 60px);   /* full height minus navbar */
+      height:calc(100vh - 60px);  /* full height minus navbar */
       border:0;
-      position:relative;
-      z-index:1;
+      display:block;
     }
 
-    /* ---------- Navbar (always on top) ---------- */
-    nav{
-      position:fixed;
-      top:0;left:0;right:0;
-      background:#fff;
-      z-index:20000;
-    }
-    nav ul{
-      margin:0;
-      padding:0;
-      list-style:none;
-      display:flex;                /* desktop row */
-      align-items:center;
-    }
-
-    /* ---------- Mobile overrides ---------- */
-    @media(max-width:768px){
-      nav ul{
-        position:fixed;
-        top:60px; left:0; right:0;
-        flex-direction:column;
-        align-items:flex-start;    /* <<< stop the big blank gap */
-        background:#fff;
-        padding:0;
-        border-bottom:1px solid #eee;
-        display:none;              /* toggled with .show */
-        z-index:20001;
-        max-height:calc(100vh - 60px);
-        overflow-y:auto;
-      }
-      nav ul.show{display:flex;}
-
-      nav ul li{width:100%;}
-      nav ul li a{
-        display:block;
-        width:100%;
-        padding:1rem 1.5rem;
-        color:#222 !important;     /* <<< visible links */
-        text-decoration:none;
-        font-size:1rem;
-      }
-      nav ul li a:hover{background:#f5f5f5;}
-
-      /* KB can’t steal taps while menu is open */
-      body.menu-open iframe.kb{pointer-events:none;}
+    /* While the mobile dropdown is open, prevent the iframe eating taps */
+    @media (max-width:768px){
+      body.menu-open iframe.kb{ pointer-events:none; }
     }
   </style>
 </head>
 
 <body>
+  <!-- NAVBAR (identical markup to your other pages) -->
   <nav>
     <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-    <a href="index.html"><img src="https://www.agricova.com/cdn/shop/t/12/assets/logo.png" alt="Agricova logo"></a>
+    <a href="index.html">
+      <img src="https://www.agricova.com/cdn/shop/t/12/assets/logo.png" alt="Agricova logo">
+    </a>
+
     <ul>
       <li><a href="automation.html">Automation</a></li>
       <li><a href="https://www.agricova.com/collections/garden-supplies" target="_blank">Store</a></li>
-      <li><a href="quote.html">Get Quote</a></li>
-      <li><a href="about.html">About Us</a></li>
-      <li><a href="knowledge.html">Knowledge Base</a></li>
+      <li><a href="quote.html">Get&nbsp;Quote</a></li>
+      <li><a href="about.html">About&nbsp;Us</a></li>
+      <li><a href="knowledge.html">Knowledge&nbsp;Base</a></li>
     </ul>
   </nav>
 
-  <!-- Embedded Knowledge-Base -->
+  <!-- EMBEDDED KB -->
   <iframe class="kb" src="https://agricova.tawk.help" title="Agricova Knowledge Base"></iframe>
 
-  <!-- Mobile-menu toggle -->
+  <!-- MOBILE MENU TOGGLE: adds/removes .menu-open on <body> -->
   <script>
-    (()=>{
-      const btn=document.querySelector('.menu-toggle');
-      const navUl=document.querySelector('nav ul');
-      btn.addEventListener('click',()=>{
-        const open = btn.getAttribute('aria-expanded')==='true';
-        btn.setAttribute('aria-expanded',!open);
-        navUl.classList.toggle('show');
+    (function(){
+      const toggle = document.querySelector('.menu-toggle');
+      const navUl  = document.querySelector('nav ul');
+
+      if(!toggle || !navUl) return;
+
+      toggle.addEventListener('click', () => {
+        const expanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', !expanded);
+        navUl.classList.toggle('show');             // your existing CSS handles this
         document.body.classList.toggle('menu-open');
       });
     })();
   </script>
 
-  <!-- tawk.to live-chat -->
+  <!-- tawk.to live-chat widget (unchanged) -->
   <script>
-    var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
       var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
       s1.async=true;
-      s1.src="https://embed.tawk.to/6854b89edabf301911aabda0/1iusf2b76";
+      s1.src="https://embed.tawk.to/6854b89edabf301911aabda0/1iusf2b76"; /* replace IDs if needed */
       s1.charset="UTF-8";
       s1.setAttribute("crossorigin","*");
       s0.parentNode.insertBefore(s1,s0);
