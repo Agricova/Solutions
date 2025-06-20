@@ -404,25 +404,3 @@ nav{position:sticky;top:0;z-index:1000}
   100%{opacity:0;pointer-events:none}
 }
 
-
-
-/* --- Dark form global --- */
-.form-card label{color:var(--gray);}
-.form-card input,
-.form-card textarea,
-.form-card select{
-  background:#1e293b;
-  color:#e2e8f0;
-  border:1px solid var(--border);
-}
-.form-card input::placeholder,
-.form-card textarea::placeholder{color:#64748b}
-.form-card button{
-  background:var(--brand);
-  color:#fff;
-  border:none;
-  padding:.7rem 1.4rem;
-  border-radius:var(--radius);
-}
-.form-card button:hover{background:var(--brand-light)}
-
