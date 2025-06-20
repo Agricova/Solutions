@@ -71,7 +71,10 @@
 </nav>
 
 <div class="quote-wrapper">
-<form class="form-card" action="https://formsubmit.co/quotes@agricova.com" method="POST">
+<form class="form-card" action="https://formsubmit.co/tickets@agricova.p.tawk.email" method="POST">
+<input type="hidden" name="_subject" value="New Quote Request">
+<input type="hidden" name="_template" value="table">
+
   <h2>Request a Quote</h2>
   <input type="hidden" name="_redirect" value="quote.html#thanks">
   <label>Name
@@ -147,43 +150,6 @@ var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 })();
 </script>
 <!--End of Tawk.to Script-->
-<script id="agricova-quote-handler">
-document.addEventListener('DOMContentLoaded', function(){
-  const form = document.querySelector('#quoteForm') || document.querySelector('form[action*="quote"]');
-  if(!form) return;
-  form.id = 'quoteForm';
 
-  // ensure we don't attach multiple times
-  if(form.dataset.listenerAttached) return;
-  form.dataset.listenerAttached = "true";
-
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    const fd = new FormData(form);
-    const data = Object.fromEntries(fd.entries());
-
-    if(window.Tawk_API){
-      try{
-        Tawk_API.setAttributes({
-          name  : data.name  || data.fullname || '',
-          email : data.email || '',
-          phone : data.phone || data.tel || ''
-        }, function(){});
-        Tawk_API.addEvent('quote_form_submitted', data, function(){});
-        if(typeof Tawk_API.isChatMaximized === 'function' && !Tawk_API.isChatMaximized()){
-          Tawk_API.maximize();
-        }
-      }catch(err){console.error(err);}
-    }
-
-    // single alert
-    if(!form.dataset.alertShown){
-      alert("Thanks! We’ve received your quote details.");
-      form.dataset.alertShown = "true";
-    }
-    form.reset();
-  });
-});
-</script>
 </body>
 </html>
