@@ -119,187 +119,71 @@ var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 })();
 </script>
 <!-- End Tawk.to Live Chat -->
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-    var quoteForm = document.querySelector('form#quoteForm') || document.querySelector('form[action*="quote"]');
-    if(quoteForm){
-        quoteForm.setAttribute('id','quoteForm');
-        quoteForm.addEventListener('submit', function(e){
-            e.preventDefault();
-            var fd = new FormData(quoteForm);
-            var data = {};
-            fd.forEach(function(v,k){data[k]=v});
-            if(window.Tawk_API){
-                try{
-                    Tawk_API.addEvent('quote_form_submitted', data, function(err){});
-                    Tawk_API.maximize();
-                }catch(err){
-                    console.error(err);
-                }
-            }
-            // give user feedback
-            alert("Thanks! We've received your quote request and will be in touch shortly via chat.");
-            quoteForm.reset();
-        });
-    }
-});
-</script>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-  s1.async=true;
-  s1.src='https://embed.tawk.to/6854b89edabf301911aabda0/1iu5f2b76';
-  s1.charset='UTF-8';
-  s1.setAttribute('crossorigin','*');
-  s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-    var quoteForm = document.querySelector('form#quoteForm') || document.querySelector('form[action*="quote"]');
-    if(quoteForm){
-        quoteForm.setAttribute('id','quoteForm');
-        quoteForm.addEventListener('submit', function(e){
-            e.preventDefault();
-            var fd = new FormData(quoteForm);
-            var data = {};
-            fd.forEach(function(v,k){data[k]=v});
-            if(window.Tawk_API){
-                try{
-                    Tawk_API.addEvent('quote_form_submitted', data, function(err){});
-                    Tawk_API.maximize();
-                }catch(err){
-                    console.error(err);
-                }
-            }
-            alert("Thanks! We've received your quote request and will be in touch via chat.");
-            quoteForm.reset();
-        });
-    }
-});
-</script>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-  s1.async=true;
-  s1.src='https://embed.tawk.to/6854b89edabf301911aabda0/1iu5f2b76';
-  s1.charset='UTF-8';
-  s1.setAttribute('crossorigin','*');
-  s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
-<script>
-document.addEventListener('DOMContentLoaded', function(){
-  var quoteForm = document.querySelector('form#quoteForm') || document.querySelector('form[action*="quote"]');
-  if(!quoteForm) return;
-  quoteForm.id = 'quoteForm';
 
-  quoteForm.addEventListener('submit', function(e){
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/6854b89edabf301911aabda0/1iu5f2b76';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/6854b89edabf301911aabda0/1iu5f2b76';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+<script id="agricova-quote-handler">
+document.addEventListener('DOMContentLoaded', function(){
+  const form = document.querySelector('#quoteForm') || document.querySelector('form[action*="quote"]');
+  if(!form) return;
+  form.id = 'quoteForm';
+
+  // ensure we don't attach multiple times
+  if(form.dataset.listenerAttached) return;
+  form.dataset.listenerAttached = "true";
+
+  form.addEventListener('submit', function(e){
     e.preventDefault();
-    var fd = new FormData(quoteForm);
-    var data = {};
-    fd.forEach((v,k)=>data[k]=v);
+    const fd = new FormData(form);
+    const data = Object.fromEntries(fd.entries());
 
-    // Push visitor details + custom event to Tawk
     if(window.Tawk_API){
       try{
         Tawk_API.setAttributes({
           name  : data.name  || data.fullname || '',
           email : data.email || '',
           phone : data.phone || data.tel || ''
-        }, ()=>{});
-        Tawk_API.addEvent('quote_form_submitted', data, ()=>{});
-        Tawk_API.maximize();
-        prefillChat(data);
-      }catch(err){ console.error(err); }
+        }, function(){});
+        Tawk_API.addEvent('quote_form_submitted', data, function(){});
+        if(typeof Tawk_API.isChatMaximized === 'function' && !Tawk_API.isChatMaximized()){
+          Tawk_API.maximize();
+        }
+      }catch(err){console.error(err);}
     }
 
-    // Simple thank‑you
-    alert("Thanks! We’ve received your quote details.");
-    quoteForm.reset();
+    // single alert
+    if(!form.dataset.alertShown){
+      alert("Thanks! We’ve received your quote details.");
+      form.dataset.alertShown = "true";
+    }
+    form.reset();
   });
-
-  // Prefill chat input so visitor can hit Enter (optional)
-  function prefillChat(d){
-    var payload = "Hi! Here are my quote details:\n" +
-                  Object.entries(d).map(([k,v])=>k + ': ' + v).join("\n") +
-                  "\nThanks!";
-    var tries = 0;
-    var timer = setInterval(function(){
-      var iframe = document.querySelector('iframe[tawkchat-frame]');
-      if(iframe && iframe.contentWindow){
-        try{
-          var doc = iframe.contentDocument || iframe.contentWindow.document;
-          var input = doc.querySelector('textarea') || doc.querySelector('input[type="text"]');
-          if(input){
-            input.value = payload;
-            input.dispatchEvent(new Event('input', {bubbles:true}));
-            input.focus();
-            clearInterval(timer);
-          }
-        }catch(e){}
-      }
-      if(++tries>20){clearInterval(timer);}
-    }, 500);
-  }
 });
-</script>
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-  s1.async=true;
-  s1.src='https://embed.tawk.to/6854b89edabf301911aabda0/1iu5f2b76';
-  s1.charset='UTF-8';
-  s1.setAttribute('crossorigin','*');
-  s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
-<script>
-(function(){
-  if(window._agricovaQuoteHooked) return;
-  window._agricovaQuoteHooked = true;
-
-  document.addEventListener('DOMContentLoaded', function(){
-    const form = document.querySelector('#quoteForm') || document.querySelector('form[action*="quote"]');
-    if(!form) return;
-    form.id = 'quoteForm';
-
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      const fd = new FormData(form);
-      const data = {};
-      fd.forEach((v,k)=>data[k]=v);
-
-      if(window.Tawk_API){
-        try{
-          Tawk_API.setAttributes({
-            name  : data.name  || data.fullname || '',
-            email : data.email || '',
-            phone : data.phone || data.tel || ''
-          }, ()=>{});
-          Tawk_API.addEvent('quote_form_submitted', data, ()=>{});
-          // open widget only if it's not already open
-          if(typeof Tawk_API.isChatMaximized === 'function' && !Tawk_API.isChatMaximized()){
-            Tawk_API.maximize();
-          }
-        }catch(err){ console.error(err); }
-      }
-
-      // single thank‑you
-      alert("Thanks! We’ve received your quote details. A chat agent will reach out shortly.");
-      form.reset();
-    }, {once:false});
-  });
-})();
 </script>
 </body>
 </html>
