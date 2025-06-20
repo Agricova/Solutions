@@ -71,8 +71,9 @@
 </nav>
 
 <div class="quote-wrapper">
-<form id="quoteForm"  method="POST" enctype="text/plain">
+<form class="form-card" action="https://formsubmit.co/quotes@agricova.com" method="POST">
   <h2>Request a Quote</h2>
+  <input type="hidden" name="_redirect" value="quote.html#thanks">
   <label>Name
     <input name="name" required>
   </label>
@@ -111,66 +112,12 @@ var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
   var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
   s1.async=true;
   /* TODO: Replace PROPERTY_ID/UNIQUE_ID with your actual tawk.to property ID and widget ID */
-  s1.src='https://embed.tawk.to/6854b89edabf301911aabda0/1iu5f2b76';
+  s1.src='https://embed.tawk.to/6854b89edabf301911aabda0/1iusf2b76';
   s1.charset='UTF-8';
   s1.setAttribute('crossorigin','*');
   s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 <!-- End Tawk.to Live Chat -->
-
-<script>
-function sendToTawk(formId, service){
-  const f = document.getElementById(formId);
-  f.addEventListener('submit', function(e){
-    e.preventDefault();
-    const data = Object.fromEntries(new FormData(f).entries());
-    if(window.Tawk_API){
-      // set visitor info
-      Tawk_API.setAttributes({
-        name: data.name || '',
-        email: data.email || '',
-        service: service || data.subject || ''
-      }, function(err){});
-      // compose message
-      let msg = '';
-      for(const [k,v] of Object.entries(data)){ if(k!=='name'&&k!=='email') msg+= k+': '+v+'\n';}
-      Tawk_API.addEvent('Form Submission', { message: msg });
-      Tawk_API.maximize();
-      f.style.display='none';
-      document.getElementById('thanks').style.display='block';
-    }else{
-      // fallback mailto
-      window.location.href = 'mailto:agracovait@gmail.com';
-    }
-  });
-}
-</script>
-
-<script>sendToTawk("quoteForm","Quote");</script>
-
-<script>
-(function(){
-  const form=document.getElementById('quoteForm');
-  if(!form)return;
-  const thanks=document.getElementById('thanks');
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    const data=Object.fromEntries(new FormData(form).entries());
-    const lines=Object.entries(data).map(([k,v])=>k+': '+v).join('\n');
-    const send=()=>{
-      if(window.Tawk_API&&Tawk_API.addMessage){
-         Tawk_API.setAttributes({name:data.name||'',email:data.email||'',department:'Quote'},()=>{});
-         Tawk_API.addMessage({text:lines,position:'visitor'});
-         Tawk_API.maximize();
-         form.style.display='none';
-         if(thanks) thanks.style.display='block';
-      }else setTimeout(send,500);
-    };
-    send();
-  });
-})();
-</script>
-
 </body>
 </html>
